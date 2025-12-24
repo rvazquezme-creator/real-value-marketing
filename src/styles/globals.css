@@ -1,0 +1,337 @@
+/* =========================
+   RESET & GLOBAL FIXES
+========================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.65;
+    overflow-x: hidden;
+    /* ✅ FIX MOBILE OVERFLOW */
+}
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+h1,
+h2,
+h3 {
+    color: var(--color-primary);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+h1 {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+}
+
+h2 {
+    font-size: 1.9rem;
+}
+
+p {
+    color: var(--color-text-muted);
+    max-width: 720px;
+}
+
+/* =========================
+   LINKS & BUTTONS
+========================= */
+a {
+    color: var(--color-secondary);
+    text-decoration: none;
+}
+
+.button,
+button {
+    background: linear-gradient(135deg,
+            var(--color-secondary),
+            var(--color-secondary-soft));
+    color: #fff;
+    padding: 0.7rem 1.4rem;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button:hover,
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(59, 130, 246, 0.35);
+}
+
+/* =========================
+   LAYOUT
+========================= */
+main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 4.5rem 1.25rem;
+}
+
+section {
+    margin-bottom: 5.5rem;
+}
+
+/* =========================
+   NAVBAR (COMPACT + ANIMATED)
+========================= */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-bg-nav);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.navbar.scrolled {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.nav-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0.9rem 1.25rem;
+    /* ✅ REDUCED HEIGHT */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-toggle {
+    position: relative;
+    width: 24px;
+    height: 18px;
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.menu-toggle span:first-child {
+    top: 4px;
+}
+
+.menu-toggle span:last-child {
+    bottom: 4px;
+}
+
+/* Perfect X */
+.navbar.open .menu-toggle span:first-child {
+    transform: rotate(45deg) translateY(0px);
+}
+
+.navbar.open .menu-toggle span:last-child {
+    transform: rotate(-45deg) translateY(0px);
+}
+
+/* Desktop links */
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+/* =========================
+   MOBILE DROPDOWN (SLIDE + FADE)
+========================= */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--color-bg-nav);
+        flex-direction: column;
+        padding: 1.75rem 1.5rem;
+        gap: 1.25rem;
+        border-bottom: 1px solid var(--color-border);
+
+        /* animation */
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .nav-links.show {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+}
+
+/* =========================
+   HERO (NO OVERFLOW MOBILE)
+========================= */
+.hero {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3.5rem;
+    padding: 6.5rem 1.25rem;
+    background: linear-gradient(180deg,
+            var(--color-bg),
+            var(--color-bg-soft));
+    max-width: 100vw;
+    /* ✅ */
+}
+
+.hero-visual {
+    display: flex;
+    justify-content: center;
+}
+
+.hero-mockup {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    height: 260px;
+}
+
+.mockup-card {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg,
+            var(--color-secondary),
+            var(--color-secondary-soft));
+}
+
+.mockup-card.secondary {
+    inset: 20px;
+    /* ✅ REMOVED NEGATIVE INSET */
+    opacity: 0.35;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-mockup {
+        margin: 0 auto;
+    }
+}
+
+/* =========================
+   CARDS
+========================= */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.card,
+article {
+    background: var(--color-bg-card);
+    padding: 1.8rem;
+    border-radius: var(--radius-lg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover,
+article:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 900px) {
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================
+   FORMS
+========================= */
+form {
+    margin-top: 2rem;
+}
+
+label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+input,
+textarea {
+    background: var(--color-bg-input);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 0.75rem;
+    color: var(--color-text);
+}
+
+fieldset {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.1rem;
+    margin-bottom: 1.4rem;
+}
+
+legend {
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+fieldset label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 1.25rem;
+}
+
+/* =========================
+   ERRORS
+========================= */
+.error {
+    color: #f87171;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+.animate {
+    opacity: 0;
+    transform: translateY(28px);
+}
+
+.animate.visible {
+    animation: fadeUp 0.55s ease forwards;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
