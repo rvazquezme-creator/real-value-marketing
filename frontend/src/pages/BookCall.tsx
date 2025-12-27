@@ -7,6 +7,9 @@ import Button from "../components/ui/Button";
 
 import type { BookCallFormData } from "../types/forms";
 
+const API_URL =
+    import.meta.env.VITE_API_URL || "http://localhost:3001";
+
 const faqs = [
     {
         q: "Is this really free?",
@@ -26,39 +29,100 @@ const faqs = [
     },
 ];
 
-const BookCall = () => {
-    const [formData, setFormData] = useState<BookCallFormData>({
-        name: "",
-        businessEmail: "",
-        phoneNumber: "",
-        website: "",
-        companyName: "",
-        canAffordTrial: "yes",
-        currentProblem: "",
-        solveTimeline: "today",
-    });
+const initialFormState: BookCallFormData = {
+    name: "",
+    businessEmail: "",
+    phoneNumber: "",
+    website: "",
+    companyName: "",
+    canAffordTrial: "yes",
+    currentProblem: "",
+    solveTimeline: "today",
+};
 
-    const [errors, setErrors] = useState<Partial<BookCallFormData>>({});
+const BookCall = () => {
+    const [formData, setFormData] =
+        useState<BookCallFormData>(initialFormState);
+
+    const [errors, setErrors] =
+        useState<Partial<BookCallFormData>>({});
+
+    const [submitting, setSubmitting] = useState(false);
+    const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+
+        // Clear error as user types
+        if (errors[name as keyof BookCallFormData]) {
+            setErrors((prev) => ({
+                ...prev,
+                [name]: undefined,
+            }));
+        }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
+    const validate = () => {
         const newErrors: Partial<BookCallFormData> = {};
-        if (!formData.name) newErrors.name = "Name is required.";
-        if (!formData.businessEmail)
+
+        if (!formData.name.trim()) {
+            newErrors.name = "Name is required.";
+        }
+
+        if (!formData.businessEmail.trim()) {
             newErrors.businessEmail = "Business email is required.";
+        } else if (
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.businessEmail)
+        ) {
+            newErrors.businessEmail = "Enter a valid email address.";
+        }
 
-        setErrors(newErrors);
-        if (Object.keys(newErrors).length > 0) return;
+        return newErrors;
+    };
 
-        console.log("Book a Call submission:", formData);
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (submitting) return;
+
+        const validationErrors = validate();
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length > 0) return;
+
+        try {
+            setSubmitting(true);
+            setSubmitError(null);
+
+            const res = await fetch(`${API_URL}/api/book-call`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!res.ok) {
+                throw new Error("API request failed");
+            }
+
+            setSubmitSuccess(true);
+            setFormData(initialFormState);
+        } catch (err) {
+            console.error(err);
+            setSubmitError(
+                "Something went wrong. Please try again later."
+            );
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -69,8 +133,8 @@ const BookCall = () => {
                     <h1>Book a Call</h1>
                     <h2>Let’s Make Money</h2>
                     <p>
-                        Fill out the form and we’ll contact you within 48 hours to find out
-                        if we can help you.
+                        Fill out the form and we’ll contact you within 48 hours to find
+                        out if we can help you.
                     </p>
                     <p>
                         No costs. No obligations. No annoying sales pitch.
@@ -81,8 +145,13 @@ const BookCall = () => {
 
                 {/* RIGHT */}
                 <div className="book-call-form">
-                    <form className="animate" onSubmit={handleSubmit}>
-                        <Input label="Name" name="name" value={formData.name} onChange={handleChange} />
+                    <form className="animate" onSubmit={handleSubmit} noValidate>
+                        <Input
+                            label="Name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                        />
                         {errors.name && <div className="error">{errors.name}</div>}
 
                         <Input
@@ -182,7 +251,16 @@ const BookCall = () => {
                             </label>
                         </fieldset>
 
-                        <Button type="submit">Submit Application</Button>
+                        {submitError && <div className="error">{submitError}</div>}
+                        {submitSuccess && (
+                            <div className="success">
+                                Thank you! We’ll be in touch shortly.
+                            </div>
+                        )}
+
+                        <Button type="submit" disabled={submitting}>
+                            {submitting ? "Submitting..." : "Submit Application"}
+                        </Button>
                     </form>
                 </div>
             </section>

@@ -1,73 +1,219 @@
-# React + TypeScript + Vite
+# Real Value Marketing – Website & WebApp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Landing page and lead generation web application connected to Odoo CRM.
 
-Currently, two official plugins are available:
+This project is designed for B2B companies and business owners who want a clean,
+high-converting website with a professional CRM integration.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🌐 Project Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Project name:**  
+Real Value Marketing Website and WebApp
 
-## Expanding the ESLint configuration
+**Objective:**  
+Landing page + lead generation system connected to Odoo CRM.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**Target audience:**  
+Business owners / B2B companies
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**Domain:**  
+https://realvaluemarketing.com
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🧱 Tech Stack
+
+### Frontend
+- React
+- TypeScript
+- Vite
+- Custom CSS (no UI frameworks)
+- Deployed on **Vercel**
+
+### Backend
+- Node.js
+- Express
+- Odoo JSON-RPC 2.0 API
+- Deployed on **Railway**
+
+---
+
+## 📁 Project Structure
+
+This repository is a **monorepo** containing both frontend and backend:
+
+```
+real-value-marketing/
+├── frontend/        # React + Vite frontend
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   ├── vite.config.ts
+│   └── .env
+│
+├── backend/         # Node.js + Express API
+│   ├── server.js
+│   ├── odooClient.js
+│   ├── package.json
+│   └── .env
+│
+├── README.md
+└── .gitignore
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Each folder is an **independent Node.js project** with its own dependencies.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## ✨ Main Features
+
+### Website
+- Modern, responsive landing page
+- Animated UI and smooth scrolling
+- Clear CTA-focused design
+
+### Book a Call (Lead Generation)
+- Form with inline validation UX
+- Sends data to backend API
+- Creates CRM leads in Odoo
+
+### Odoo CRM Integration
+When a user submits the Book a Call form:
+1. Searches for an existing contact by email
+2. If not found:
+   - Creates a company (parent)
+   - Creates a contact linked to that company
+3. Creates a CRM lead linked to the contact
+
+This prevents duplicate contacts and keeps CRM data clean.
+
+### Newsletter
+- Placeholder form for now
+- Ready for future integration
+
+### Blog
+- Static / mock data for now
+- Ready for future CMS or API integration
+
+> ⚠️ All current data is **test data only**.
+
+---
+
+## ⚙️ Environment Variables
+
+### Backend (`/backend/.env`)
+```env
+ODOO_URL=https://your-odoo-instance.odoo.com
+ODOO_DB=your_database_name
+ODOO_USER=your_user_email
+ODOO_PASSWORD=your_password
 ```
+
+---
+
+### Frontend (`/frontend/.env`)
+```env
+VITE_API_URL=https://your-backend-url
+```
+
+Example (local development):
+```env
+VITE_API_URL=http://localhost:3001
+```
+
+---
+
+## 🧪 Local Development
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Runs on:
+```
+http://localhost:5173
+```
+
+---
+
+### Backend
+```bash
+cd backend
+npm install
+node server.js
+```
+
+Runs on:
+```
+http://localhost:3001
+```
+
+---
+
+## 🚀 Deployment
+
+### Frontend (Vercel)
+- Import GitHub repository
+- Set **Root Directory** to `frontend`
+- Build command:
+  ```
+  npm run build
+  ```
+- Output directory:
+  ```
+  dist
+  ```
+- Add environment variables in Vercel:
+  ```
+  VITE_API_URL=https://your-backend-url
+  ```
+
+---
+
+### Backend (Railway)
+- Import the same GitHub repository
+- Set **Root Directory** to `backend`
+- Start command:
+  ```
+  node server.js
+  ```
+- Add backend environment variables in Railway dashboard
+
+---
+
+## 🔐 Security Notes
+
+- Secrets are stored only in backend `.env`
+- Frontend never communicates directly with Odoo
+- CORS is configured for frontend → backend communication
+- `.env` files are excluded from version control
+
+---
+
+## 📦 Repository Status
+
+- Repository visibility: **Public**
+- Project ownership: **Client-owned**
+- All credentials and sensitive data are excluded
+
+---
+
+## 📌 Notes
+
+- Newsletter and blog currently use placeholder data
+- Ready for future expansion:
+  - CMS integration
+  - Marketing automation
+  - Advanced CRM workflows
+  - Analytics & tracking
+
+---
+
+## 📄 License
+
+This project is client-owned and not intended for redistribution.
