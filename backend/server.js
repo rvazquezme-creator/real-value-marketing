@@ -27,14 +27,19 @@ const allowedOrigins = [
 app.use(
     cors({
         origin(origin, callback) {
+            // Allow requests with no origin (health checks, curl)
             if (!origin) return callback(null, true);
-            if (allowedOrigins.includes(origin)) return callback(null, true);
-            return callback(new Error(`CORS blocked for origin: ${origin}`));
+
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+
+            return callback(null, false);
         },
-        methods: ["GET", "POST"],
-        allowedHeaders: ["Content-Type"],
+        credentials: false,
     })
 );
+
 
 /* =========================
    MIDDLEWARES
