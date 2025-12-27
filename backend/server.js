@@ -20,26 +20,29 @@ process.on("uncaughtException", (err) => {
    CORS (PROD + DEV)
 ========================= */
 const allowedOrigins = [
-    process.env.FRONTEND_ORIGIN,
+    process.env.FRONTEND_ORIGIN,          // https://realvaluemarketing.com
+    process.env.FRONTEND_ORIGIN_WWW,      // https://www.realvaluemarketing.com
     "http://localhost:5173",
 ].filter(Boolean);
 
 app.use(
     cors({
         origin(origin, callback) {
-            // Allow requests with no origin (health checks, curl)
+            // Allow requests with no origin (health checks, curl, server-to-server)
             if (!origin) return callback(null, true);
 
             if (allowedOrigins.includes(origin)) {
                 return callback(null, true);
             }
 
+            console.warn("❌ CORS blocked origin:", origin);
             return callback(null, false);
         },
+        methods: ["GET", "POST", "OPTIONS"],
+        allowedHeaders: ["Content-Type"],
         credentials: false,
     })
 );
-
 
 /* =========================
    MIDDLEWARES
