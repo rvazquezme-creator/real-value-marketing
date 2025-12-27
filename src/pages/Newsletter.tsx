@@ -66,7 +66,9 @@ const Newsletter = () => {
 
             <section style={{ marginTop: "4rem", textAlign: "center" }}>
                 <p>Want help implementing these strategies?</p>
-                <Link to="/book-a-call">Book a Call</Link>
+                <Link className="button" to="/book-a-call">
+                    Book a Call
+                </Link>
             </section>
         </PageWrapper>
     );

@@ -1,28 +1,47 @@
 :root {
-    /* Base */
-    --color-bg: #0b0f19;
-    --color-bg-soft: #0f172a;
-    --color-bg-nav: #0b1220;
-    --color-bg-card: #111827;
-    --color-bg-input: #0f172a;
+   /* ======================
+     BACKGROUND (BLACK CORE)
+     Inspired by logo
+  ====================== */
+   --color-bg: #050608;
+   /* pure dark */
+   --color-bg-soft: #0a0d14;
+   /* subtle contrast */
+   --color-bg-nav: #050608;
+   /* navbar same as bg */
+   --color-bg-card: #0f1218;
+   /* card plates */
+   --color-bg-input: #0a0d14;
+   /* inputs */
 
-    /* Text */
-    --color-primary: #f9fafb;
-    --color-text: #e5e7eb;
-    --color-text-muted: #9ca3af;
+   /* ======================
+     TEXT (HIGH CONTRAST)
+  ====================== */
+   --color-primary: #ffffff;
+   /* headings */
+   --color-text: #eaeaea;
+   /* body */
+   --color-text-muted: #b0b0b0;
+   /* secondary */
 
-    /* Accent (gold) */
-    --color-secondary: #d4af37;
-    --color-secondary-soft: #f5d76e;
+   /* ======================
+     ACCENT (AGED GOLD)
+     Money / value signal
+  ====================== */
+   --color-accent: #e6c15a;
+   --color-accent-hover: #f1d57a;
+   --color-accent-soft: #fff3c4;
 
-    /* Borders */
-    --color-border: #1f2937;
+   /* ======================
+     STRUCTURE
+  ====================== */
+   --color-border: rgba(255, 255, 255, 0.06);
 
-    --font-sans: Inter, system-ui, -apple-system, sans-serif;
+   --font-sans: Inter, system-ui, -apple-system, sans-serif;
 
-    --max-width: 1200px;
+   --max-width: 1200px;
 
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 18px;
+   --radius-sm: 6px;
+   --radius-md: 10px;
+   --radius-lg: 18px;
 }

@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import logo from "../../assets/logos/RVM_Logo.png";
+
 
 const Hero = () => {
     return (
@@ -22,8 +24,12 @@ const Hero = () => {
 
             <div className="hero-visual animate">
                 <div className="hero-mockup">
-                    <div className="mockup-card" />
-                    <div className="mockup-card secondary" />
+                    <div className="mockup-card" >
+                        <img src={logo} alt="Real Value Marketing logo" className="hero-media" />
+                    </div>
+                    <div className="mockup-card secondary" >
+                        {/* <img src={logo} alt="Real Value Marketing logo" /> */}
+                    </div>
                 </div>
             </div>
         </section>

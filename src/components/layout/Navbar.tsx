@@ -1,26 +1,67 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import logo from "../../assets/logos/RVM_Logo.png";
+
+const HIDE_AFTER_Y = 120;
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
+    const [hidden, setHidden] = useState(false);
+
+    const lastY = useRef(0);
+    const ticking = useRef(false);
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 10);
-        window.addEventListener("scroll", onScroll);
+        lastY.current = window.scrollY;
+
+        const update = () => {
+            const y = window.scrollY;
+
+            // Keep visible near the top
+            if (y < HIDE_AFTER_Y) {
+                setHidden(false);
+                lastY.current = y;
+                ticking.current = false;
+                return;
+            }
+
+            // If menu open, never hide
+            if (open) {
+                setHidden(false);
+                lastY.current = y;
+                ticking.current = false;
+                return;
+            }
+
+            // Hide only while scrolling down; show on any scroll up
+            if (y > lastY.current) setHidden(true);
+            if (y < lastY.current) setHidden(false);
+
+            lastY.current = y;
+            ticking.current = false;
+        };
+
+        const onScroll = () => {
+            if (!ticking.current) {
+                ticking.current = true;
+                requestAnimationFrame(update);
+            }
+        };
+
+        window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
-    }, []);
+    }, [open]);
 
     return (
-        <nav className={`navbar ${open ? "open" : ""} ${scrolled ? "scrolled" : ""}`}>
+        <nav className={`navbar ${hidden ? "navbar-hidden" : ""} ${open ? "open" : ""}`}>
             <div className="nav-inner">
-                <Link to="/" className="logo">
-                    Real Value Marketing
+                <Link to="/" className="logo" onClick={() => setOpen(false)}>
+                    <img src={logo} alt="Real Value Marketing logo" />
                 </Link>
 
                 <button
                     className="menu-toggle"
-                    onClick={() => setOpen(!open)}
+                    onClick={() => setOpen((v) => !v)}
                     aria-label="Toggle menu"
                 >
                     <span />
@@ -29,13 +70,19 @@ const Navbar = () => {
 
                 <ul className={`nav-links ${open ? "show" : ""}`}>
                     <li>
-                        <Link to="/blog" onClick={() => setOpen(false)}>Blog</Link>
+                        <Link to="/blog" onClick={() => setOpen(false)}>
+                            Blog
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/newsletter" onClick={() => setOpen(false)}>Newsletter</Link>
+                        <Link to="/newsletter" onClick={() => setOpen(false)}>
+                            Newsletter
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/book-a-call" onClick={() => setOpen(false)}>Book a Call</Link>
+                        <Link to="/book-a-call" className="nav-cta" onClick={() => setOpen(false)}>
+                            Book a Call
+                        </Link>
                     </li>
                 </ul>
             </div>

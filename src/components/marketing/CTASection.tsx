@@ -4,7 +4,7 @@ const CTASection = () => {
     return (
         <section
             style={{
-                backgroundColor: "#0f172a",
+                // backgroundColor: "#0f172a",
                 color: "#ffffff",
                 padding: "6rem 1.5rem",
                 textAlign: "center",

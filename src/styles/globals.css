@@ -1,10 +1,14 @@
 /* =========================
-   RESET & GLOBAL FIXES
+   RESET & GLOBAL
 ========================= */
 *,
 *::before,
 *::after {
     box-sizing: border-box;
+}
+
+:root {
+    --nav-height: 72px;
 }
 
 html,
@@ -16,7 +20,11 @@ body {
     color: var(--color-text);
     line-height: 1.65;
     overflow-x: hidden;
-    /* ✅ FIX MOBILE OVERFLOW */
+}
+
+/* ✅ Because navbar is fixed now */
+body {
+    padding-top: var(--nav-height);
 }
 
 /* =========================
@@ -26,12 +34,12 @@ h1,
 h2,
 h3 {
     color: var(--color-primary);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    letter-spacing: -0.015em;
 }
 
 h1 {
-    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-size: clamp(2.3rem, 5vw, 3.4rem);
 }
 
 h2 {
@@ -44,31 +52,74 @@ p {
 }
 
 /* =========================
-   LINKS & BUTTONS
+   LINKS (ANIMATED UNDERLINE)
 ========================= */
 a {
-    color: var(--color-secondary);
+    position: relative;
+    color: var(--color-accent);
     text-decoration: none;
 }
 
+a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.25s ease;
+}
+
+a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* CTA & buttons should NOT get underline */
+.nav-cta::after,
+.button::after,
+button::after {
+    display: none;
+}
+
+/* =========================
+   BUTTONS / CTA
+========================= */
 .button,
 button {
     background: linear-gradient(135deg,
-            var(--color-secondary),
-            var(--color-secondary-soft));
-    color: #fff;
-    padding: 0.7rem 1.4rem;
+            var(--color-accent),
+            var(--color-accent-hover));
+    color: #050608;
+    padding: 0.85rem 1.8rem;
     border-radius: var(--radius-md);
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-weight: 700;
     cursor: pointer;
-    font-weight: 500;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    box-shadow:
+        0 6px 16px rgba(230, 193, 90, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .button:hover,
 button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(59, 130, 246, 0.35);
+    box-shadow:
+        0 10px 28px rgba(230, 193, 90, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.button:active,
+button:active {
+    transform: translateY(0);
 }
 
 /* =========================
@@ -85,30 +136,53 @@ section {
 }
 
 /* =========================
-   NAVBAR (COMPACT + ANIMATED)
+   NAVBAR  ✅ FIXED + RELIABLE HIDE/SHOW
 ========================= */
 .navbar {
-    position: sticky;
+    position: fixed;
+    /* ✅ CHANGED from sticky */
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
     background: var(--color-bg-nav);
     border-bottom: 1px solid var(--color-border);
+
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    transition: transform 0.35s ease;
+}
+
+/* hide on scroll down */
+.navbar-hidden {
+    transform: translate3d(0, -110%, 0);
 }
 
 .navbar.scrolled {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
 }
 
 .nav-inner {
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 0.9rem 1.25rem;
-    /* ✅ REDUCED HEIGHT */
+    height: var(--nav-height);
+    /* ✅ ensures consistent height */
+    padding: 0 1.25rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.logo img {
+    height: 42px;
+    /* ✅ FIX (was 100px) */
+    width: auto;
+    display: block;
+}
+
+/* =========================
+   MENU TOGGLE (PERFECT X)
+========================= */
 .menu-toggle {
     position: relative;
     width: 26px;
@@ -128,10 +202,9 @@ section {
     background: var(--color-primary);
     border-radius: 2px;
     transform-origin: center;
-    transition: transform 0.25s ease, top 0.25s ease, opacity 0.25s ease;
+    transition: transform 0.25s ease, top 0.25s ease;
 }
 
-/* Two-line hamburger */
 .menu-toggle span:first-child {
     top: calc(50% - 6px);
 }
@@ -140,7 +213,6 @@ section {
     top: calc(50% + 6px);
 }
 
-/* Perfect X: collapse to center then rotate */
 .navbar.open .menu-toggle span:first-child {
     top: 50%;
     transform: translateY(-50%) rotate(45deg);
@@ -151,15 +223,46 @@ section {
     transform: translateY(-50%) rotate(-45deg);
 }
 
-/* Desktop links */
+/* =========================
+   NAV LINKS
+========================= */
 .nav-links {
     display: flex;
     gap: 2rem;
     list-style: none;
 }
 
+/* CTA in nav (same glow language as buttons) */
+.nav-cta {
+    padding: 0.5rem 1.2rem;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    color: #050608;
+
+    background: linear-gradient(135deg,
+            var(--color-accent),
+            var(--color-accent-hover));
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    box-shadow:
+        0 6px 16px rgba(230, 193, 90, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow:
+        0 10px 28px rgba(230, 193, 90, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
 /* =========================
-   MOBILE DROPDOWN (SLIDE + FADE)
+   MOBILE DROPDOWN
 ========================= */
 @media (max-width: 768px) {
     .menu-toggle {
@@ -177,7 +280,6 @@ section {
         gap: 1.25rem;
         border-bottom: 1px solid var(--color-border);
 
-        /* animation */
         opacity: 0;
         transform: translateY(-10px);
         pointer-events: none;
@@ -192,55 +294,26 @@ section {
 }
 
 /* =========================
-   HERO (NO OVERFLOW MOBILE)
+   HERO
 ========================= */
 .hero {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     gap: 3.5rem;
     padding: 6.5rem 1.25rem;
-    background: linear-gradient(180deg,
+    background:
+        radial-gradient(1200px 500px at 50% -200px,
+            rgba(255, 255, 255, 0.05),
+            transparent 70%),
+        linear-gradient(180deg,
             var(--color-bg),
             var(--color-bg-soft));
-    max-width: 100vw;
-    /* ✅ */
-}
-
-.hero-visual {
-    display: flex;
-    justify-content: center;
-}
-
-.hero-mockup {
-    position: relative;
-    width: 100%;
-    max-width: 380px;
-    height: 260px;
-}
-
-.mockup-card {
-    position: absolute;
-    inset: 0;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg,
-            var(--color-secondary),
-            var(--color-secondary-soft));
-}
-
-.mockup-card.secondary {
-    inset: 20px;
-    /* ✅ REMOVED NEGATIVE INSET */
-    opacity: 0.35;
 }
 
 @media (max-width: 768px) {
     .hero {
         grid-template-columns: 1fr;
         text-align: center;
-    }
-
-    .hero-mockup {
-        margin: 0 auto;
     }
 }
 
@@ -255,7 +328,13 @@ section {
 
 .card,
 article {
-    background: var(--color-bg-card);
+    background:
+        linear-gradient(180deg,
+            rgba(255, 255, 255, 0.02),
+            rgba(0, 0, 0, 0.35)),
+        var(--color-bg-card);
+
+    border: 1px solid rgba(255, 255, 255, 0.04);
     padding: 1.8rem;
     border-radius: var(--radius-lg);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -264,7 +343,7 @@ article {
 .card:hover,
 article:hover {
     transform: translateY(-4px);
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
 }
 
 @media (max-width: 900px) {
@@ -307,13 +386,6 @@ legend {
     color: var(--color-text-muted);
 }
 
-fieldset label {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-right: 1.25rem;
-}
-
 /* =========================
    ERRORS
 ========================= */
@@ -340,4 +412,48 @@ fieldset label {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-nav);
+}
+
+.footer-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-socials {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-socials svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-text-muted);
+    transition: fill 0.25s ease, transform 0.25s ease;
+}
+
+.footer-socials a:hover svg {
+    fill: var(--color-accent);
+    transform: translateY(-2px);
+}
+
+.hero-media {
+    max-width: 100%;
 }
