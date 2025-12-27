@@ -109,6 +109,7 @@ ODOO_URL=https://your-odoo-instance.odoo.com
 ODOO_DB=your_database_name
 ODOO_USER=your_user_email
 ODOO_PASSWORD=your_password
+FRONTEND_ORIGIN=https://realvaluemarketing.com
 ```
 
 ---
