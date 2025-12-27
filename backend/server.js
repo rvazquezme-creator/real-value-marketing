@@ -40,6 +40,13 @@ app.use(
 app.use(express.json());
 
 /* =========================
+   HELTH CHECK
+========================= */
+app.get("/health", (req, res) => {
+    res.json({ status: "ok" });
+});
+
+/* =========================
    ROUTES
 ========================= */
 app.post("/api/book-call", async (req, res) => {
