@@ -8,42 +8,54 @@ dotenv.config();
 const app = express();
 
 /* =========================
-   CORS (DEV SAFE)
+   SAFETY: LOG CRASHES
+========================= */
+process.on("unhandledRejection", (reason) => {
+    console.error("❌ Unhandled Rejection:", reason);
+});
+process.on("uncaughtException", (err) => {
+    console.error("❌ Uncaught Exception:", err);
+});
+
+/* =========================
+   CORS (PROD + DEV)
 ========================= */
 const allowedOrigins = [
-    process.env.FRONTEND_ORIGIN,
+    process.env.FRONTEND_ORIGIN, // e.g. https://your-frontend.vercel.app
     "http://localhost:5173",
-];
+].filter(Boolean);
 
-app.use(
-    cors({
-        origin: function (origin, callback) {
-            // allow requests with no origin (like curl, postman)
-            if (!origin) return callback(null, true);
+const corsOptions = {
+    origin(origin, callback) {
+        // allow requests with no origin (curl/postman/health checks sometimes)
+        if (!origin) return callback(null, true);
 
-            if (allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            }
+        if (allowedOrigins.includes(origin)) return callback(null, true);
 
-            return callback(
-                new Error(`CORS blocked for origin: ${origin}`)
-            );
-        },
-        methods: ["GET", "POST", "OPTIONS"],
-        allowedHeaders: ["Content-Type"],
-    })
-);
+        // Pass an error so our error middleware can respond nicely
+        return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+};
+
+app.use(cors(corsOptions));
+// Ensure preflight requests are handled
+app.options("*", cors(corsOptions));
 
 /* =========================
    MIDDLEWARES
 ========================= */
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 
 /* =========================
-   HELTH CHECK
+   HEALTH CHECK
 ========================= */
-app.get("/health", (req, res) => {
-    res.json({ status: "ok" });
+app.get("/health", (_req, res) => {
+    res.status(200).json({
+        status: "ok",
+        service: "real-value-marketing-backend",
+    });
 });
 
 /* =========================
@@ -52,14 +64,9 @@ app.get("/health", (req, res) => {
 app.post("/api/book-call", async (req, res) => {
     try {
         const leadId = await createLead(req.body);
-
-        res.json({
-            success: true,
-            leadId,
-        });
+        res.status(200).json({ success: true, leadId });
     } catch (error) {
         console.error("❌ Odoo error full:", JSON.stringify(error, null, 2));
-
         res.status(500).json({
             success: false,
             message: "Failed to create lead",
@@ -68,12 +75,23 @@ app.post("/api/book-call", async (req, res) => {
     }
 });
 
+/* =========================
+   ERROR HANDLER
+========================= */
+app.use((err, _req, res, _next) => {
+    if (String(err?.message || "").startsWith("CORS blocked")) {
+        return res.status(403).json({ success: false, message: err.message });
+    }
+    console.error("❌ Express error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+});
 
 /* =========================
-   START SERVER
+   START SERVER (Railway needs process.env.PORT)
 ========================= */
-const PORT = process.env.PORT || 3001;
+const PORT = Number(process.env.PORT) || 3001;
 
 app.listen(PORT, () => {
-    console.log(`API running on port ${PORT}`);
+    console.log(`✅ API running on port ${PORT}`);
+    console.log("✅ Allowed CORS origins:", allowedOrigins);
 });
