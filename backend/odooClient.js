@@ -56,11 +56,78 @@ async function authenticate() {
 }
 
 /* =========================
-   Lead creator
+   PARTNER HELPERS
+========================= */
+async function findPartner(uid, domain) {
+    const results = await jsonRpcCall("object", "execute_kw", [
+        process.env.ODOO_DB,
+        uid,
+        process.env.ODOO_PASSWORD,
+        "res.partner",
+        "search",
+        [domain],
+        { limit: 1 },
+    ]);
+
+    return results.length ? results[0] : null;
+}
+
+async function createPartner(uid, values) {
+    return await jsonRpcCall("object", "execute_kw", [
+        process.env.ODOO_DB,
+        uid,
+        process.env.ODOO_PASSWORD,
+        "res.partner",
+        "create",
+        [values],
+    ]);
+}
+
+/* =========================
+   MAIN ENTRY
 ========================= */
 export async function createLead(formData) {
     const uid = await authenticate();
 
+    /* =========================
+       1️⃣ Company (parent)
+    ========================= */
+    let companyId = null;
+
+    if (formData.companyName) {
+        companyId = await findPartner(uid, [
+            ["name", "=", formData.companyName],
+            ["is_company", "=", true],
+        ]);
+
+        if (!companyId) {
+            companyId = await createPartner(uid, {
+                name: formData.companyName,
+                is_company: true,
+            });
+        }
+    }
+
+    /* =========================
+       2️⃣ Contact
+    ========================= */
+    let contactId = await findPartner(uid, [
+        ["email", "=", formData.businessEmail],
+        ["is_company", "=", false],
+    ]);
+
+    if (!contactId) {
+        contactId = await createPartner(uid, {
+            name: formData.name,
+            email: formData.businessEmail,
+            phone: formData.phoneNumber || false,
+            parent_id: companyId || false,
+        });
+    }
+
+    /* =========================
+       3️⃣ Lead
+    ========================= */
     const leadId = await jsonRpcCall("object", "execute_kw", [
         process.env.ODOO_DB,
         uid,
@@ -70,9 +137,22 @@ export async function createLead(formData) {
         [
             {
                 name: `Book a Call – ${formData.name}`,
+                partner_id: contactId,
                 email_from: formData.businessEmail,
                 phone: formData.phoneNumber || false,
-                description: formData.currentProblem || "",
+                description: `
+Problem:
+${formData.currentProblem || "N/A"}
+
+Budget:
+${formData.canAfford === "yes" ? "Yes" : "No"}
+
+Timeline:
+${formData.timeline || "N/A"}
+
+Website:
+${formData.website || "N/A"}
+        `,
             },
         ],
     ]);
