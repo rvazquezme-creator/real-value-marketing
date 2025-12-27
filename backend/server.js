@@ -21,27 +21,28 @@ process.on("uncaughtException", (err) => {
    CORS (PROD + DEV)
 ========================= */
 const allowedOrigins = [
-    process.env.FRONTEND_ORIGIN, // e.g. https://your-frontend.vercel.app
+    process.env.FRONTEND_ORIGIN, // https://xxx.vercel.app
     "http://localhost:5173",
 ].filter(Boolean);
 
-const corsOptions = {
-    origin(origin, callback) {
-        // allow requests with no origin (curl/postman/health checks sometimes)
-        if (!origin) return callback(null, true);
+app.use(
+    cors({
+        origin(origin, callback) {
+            // allow requests with no origin (curl, health checks, etc.)
+            if (!origin) return callback(null, true);
 
-        if (allowedOrigins.includes(origin)) return callback(null, true);
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
 
-        // Pass an error so our error middleware can respond nicely
-        return callback(new Error(`CORS blocked for origin: ${origin}`));
-    },
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
-};
-
-app.use(cors(corsOptions));
-// Ensure preflight requests are handled
-app.options("*", cors(corsOptions));
+            return callback(
+                new Error(`CORS blocked for origin: ${origin}`)
+            );
+        },
+        methods: ["GET", "POST"],
+        allowedHeaders: ["Content-Type"],
+    })
+);
 
 /* =========================
    MIDDLEWARES
@@ -82,12 +83,13 @@ app.use((err, _req, res, _next) => {
     if (String(err?.message || "").startsWith("CORS blocked")) {
         return res.status(403).json({ success: false, message: err.message });
     }
+
     console.error("❌ Express error:", err);
     res.status(500).json({ success: false, message: "Server error" });
 });
 
 /* =========================
-   START SERVER (Railway needs process.env.PORT)
+   START SERVER (Railway)
 ========================= */
 const PORT = Number(process.env.PORT) || 3001;
 
