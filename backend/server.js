@@ -10,9 +10,25 @@ const app = express();
 /* =========================
    CORS (DEV SAFE)
 ========================= */
+const allowedOrigins = [
+    process.env.FRONTEND_ORIGIN,
+    "http://localhost:5173",
+];
+
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: function (origin, callback) {
+            // allow requests with no origin (like curl, postman)
+            if (!origin) return callback(null, true);
+
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+
+            return callback(
+                new Error(`CORS blocked for origin: ${origin}`)
+            );
+        },
         methods: ["GET", "POST", "OPTIONS"],
         allowedHeaders: ["Content-Type"],
     })
@@ -49,7 +65,8 @@ app.post("/api/book-call", async (req, res) => {
 /* =========================
    START SERVER
 ========================= */
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+
 app.listen(PORT, () => {
-    console.log(`API running on http://localhost:${PORT}`);
+    console.log(`API running on port ${PORT}`);
 });
