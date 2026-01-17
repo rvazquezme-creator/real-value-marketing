@@ -2,25 +2,28 @@ import { Link } from "react-router-dom";
 
 const CTASection = () => {
     return (
-        <section
-            style={{
-                // backgroundColor: "#0f172a",
-                color: "#ffffff",
-                padding: "6rem 1.5rem",
-                textAlign: "center",
-            }}
-        >
-            <h2 style={{ color: "#ffffff" }}>
-                Ready to Build a Predictable Growth System?
-            </h2>
+        <section id="cta" className="cta-section">
+            <div className="cta-card">
+                <div className="cta-badge">Free Analysis</div>
 
-            <p style={{ color: "#cbd5f5", margin: "1.5rem auto 2.5rem" }}>
-                Apply to work with us and see if we’re a good fit.
-            </p>
+                <h2 className="cta-title">
+                    Get a Free Growth Analysis for Your Business
+                </h2>
 
-            <Link className="button" to="/book-a-call">
-                Book a Call
-            </Link>
+                <p className="cta-description">
+                    Share your business details and we’ll personally record a short
+                    video explaining what needs to happen to increase your visibility
+                    and generate more customers within 90 days.
+                </p>
+
+                <p className="cta-subtext">
+                    No cost. No obligation.
+                </p>
+
+                <Link className="button cta-button" to="/book-a-call">
+                    Get Your FREE Analysis
+                </Link>
+            </div>
         </section>
     );
 };

@@ -1,19 +1,28 @@
+import React from "react";
+
 interface InputProps {
-    label: string;
+    label?: string;
     name: string;
     type?: string;
     value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    placeholder?: string;
+    onChange: React.ChangeEventHandler<HTMLInputElement>;
     required?: boolean;
+    ariaInvalid?: boolean;
 }
 
-const Input = ({ label, ...props }: InputProps) => {
+const Input = ({ label, ariaInvalid, ...props }: InputProps) => {
     return (
         <label style={{ display: "block", marginBottom: "1rem" }}>
-            <span>{label}</span>
+            {label && <span>{label}</span>}
             <input
                 {...props}
-                style={{ display: "block", width: "100%", padding: "0.5rem" }}
+                aria-invalid={ariaInvalid}
+                style={{
+                    display: "block",
+                    width: "100%",
+                    padding: "0.5rem",
+                }}
             />
         </label>
     );

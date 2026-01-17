@@ -33,7 +33,7 @@ const BlogPost = () => {
                 <h2>Want help implementing this?</h2>
                 <p>We help businesses build predictable lead generation systems.</p>
                 <Link className="button" to="/book-a-call">
-                    Book a Call
+                    Get The FREE Analysis
                 </Link>
             </section>
 

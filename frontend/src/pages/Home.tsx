@@ -6,9 +6,32 @@ import ProcessSteps from "../components/marketing/ProcessSteps";
 import Testimonials from "../components/marketing/Testimonials";
 import CTASection from "../components/marketing/CTASection";
 
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+const ScrollToHash = () => {
+    const { hash } = useLocation();
+
+    useEffect(() => {
+        if (!hash) return;
+
+        const el = document.querySelector(hash);
+        if (el) {
+            // pequeño delay para asegurar que todo esté renderizado
+            setTimeout(() => {
+                el.scrollIntoView({ behavior: "smooth" });
+            }, 50);
+        }
+    }, [hash]);
+
+    return null;
+};
+
 const Home = () => {
     return (
         <>
+            <ScrollToHash />
+
             <Hero />
 
             <PageWrapper>

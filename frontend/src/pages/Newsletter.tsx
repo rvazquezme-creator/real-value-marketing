@@ -67,7 +67,7 @@ const Newsletter = () => {
             <section style={{ marginTop: "4rem", textAlign: "center" }}>
                 <p>Want help implementing these strategies?</p>
                 <Link className="button" to="/book-a-call">
-                    Book a Call
+                    Get The FREE Analysis
                 </Link>
             </section>
         </PageWrapper>

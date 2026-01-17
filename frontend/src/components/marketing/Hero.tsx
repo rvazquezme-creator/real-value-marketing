@@ -7,18 +7,15 @@ const Hero = () => {
         <section className="hero">
             <div className="hero-text animate">
                 <h1>
-                    Predictable Lead Generation
-                    <br />
-                    For Growing Businesses
+                    20% More PMU Customers in 90 days - Guaranteed
                 </h1>
 
                 <p>
-                    We help companies build scalable marketing systems that consistently
-                    generate qualified leads — without wasting ad spend.
+                    We'll get your PMU business (US only) 20% more clients and Top 10 Google Maps results within 90 days for your service area—or we work for free until you do.
                 </p>
 
-                <Link className="button" to="/book-a-call">
-                    Book a Call
+                <Link className="button" to="/#cta">
+                    Get The FREE Analysis
                 </Link>
             </div>
 

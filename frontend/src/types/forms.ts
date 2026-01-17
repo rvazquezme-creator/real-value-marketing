@@ -6,10 +6,11 @@ export interface BookCallFormData {
     businessEmail: string;
     phoneNumber: string;
     website: string;
+    googleMapsLink: string;
     companyName: string;
     canAffordTrial: TrialAffordability;
-    currentProblem: string;
     solveTimeline: SolveTimeline;
+    currentProblem?: string;
 }
 
 export interface NewsletterFormData {

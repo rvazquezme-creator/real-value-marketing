@@ -140,19 +140,19 @@ export async function createLead(formData) {
                 partner_id: contactId,
                 email_from: formData.businessEmail,
                 phone: formData.phoneNumber || false,
-                description: `
-Problem:
-${formData.currentProblem || "N/A"}
+                //                 description: `
+                // Problem:
+                // ${formData.currentProblem || "N/A"}
 
-Budget:
-${formData.canAfford === "yes" ? "Yes" : "No"}
+                // Budget:
+                // ${formData.canAfford === "yes" ? "Yes" : "No"}
 
-Timeline:
-${formData.timeline || "N/A"}
+                // Timeline:
+                // ${formData.timeline || "N/A"}
 
-Website:
-${formData.website || "N/A"}
-        `,
+                // Website:
+                // ${formData.website || "N/A"}
+                //         `,
             },
         ],
     ]);

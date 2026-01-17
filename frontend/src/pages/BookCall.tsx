@@ -35,17 +35,19 @@ const initialFormState: BookCallFormData = {
     phoneNumber: "",
     website: "",
     companyName: "",
+    googleMapsLink: "",
     canAffordTrial: "yes",
     currentProblem: "",
     solveTimeline: "today",
 };
 
+type FormErrors = Partial<Record<keyof BookCallFormData, string>>;
+
 const BookCall = () => {
     const [formData, setFormData] =
         useState<BookCallFormData>(initialFormState);
 
-    const [errors, setErrors] =
-        useState<Partial<BookCallFormData>>({});
+    const [errors, setErrors] = useState<FormErrors>({});
 
     const [submitting, setSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -61,7 +63,6 @@ const BookCall = () => {
             [name]: value,
         }));
 
-        // Clear error as user types
         if (errors[name as keyof BookCallFormData]) {
             setErrors((prev) => ({
                 ...prev,
@@ -71,7 +72,7 @@ const BookCall = () => {
     };
 
     const validate = () => {
-        const newErrors: Partial<BookCallFormData> = {};
+        const newErrors: FormErrors = {};
 
         if (!formData.name.trim()) {
             newErrors.name = "Name is required.";
@@ -85,8 +86,31 @@ const BookCall = () => {
             newErrors.businessEmail = "Enter a valid email address.";
         }
 
+        if (!formData.phoneNumber.trim()) {
+            newErrors.phoneNumber = "Phone number is required.";
+        }
+
+        if (!formData.website.trim()) {
+            newErrors.website = "Website is required.";
+        }
+
+        if (!formData.googleMapsLink.trim()) {
+            newErrors.googleMapsLink = "Google Maps link is required.";
+        } else if (!formData.googleMapsLink.includes("google.com/maps")) {
+            newErrors.googleMapsLink = "Enter a valid Google Maps URL.";
+        }
+
+        if (!formData.companyName.trim()) {
+            newErrors.companyName = "Company name is required.";
+        }
+
+        if (!formData.solveTimeline) {
+            newErrors.solveTimeline = "Please select a timeline.";
+        }
+
         return newErrors;
     };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -130,11 +154,13 @@ const BookCall = () => {
             <section className="book-call-grid">
                 {/* LEFT */}
                 <div className="book-call-copy">
-                    <h1>Book a Call</h1>
+                    <div className="free-stuff">Free Stuff</div>
+                    <h1 className="book-call-h1">Get Your Profile Analyzed</h1>
                     <h2>Let’s Make Money</h2>
                     <p>
-                        Fill out the form and we’ll contact you within 48 hours to find
-                        out if we can help you.
+                        Fill out the form to see if you area is still available. If it is,
+                        we'll tell you the exact things that need to happen so you can get
+                        20% more customers.
                     </p>
                     <p>
                         No costs. No obligations. No annoying sales pitch.
@@ -146,18 +172,19 @@ const BookCall = () => {
                 {/* RIGHT */}
                 <div className="book-call-form">
                     <form className="animate" onSubmit={handleSubmit} noValidate>
+
                         <Input
-                            label="Name"
                             name="name"
+                            placeholder="Your Name*"
                             value={formData.name}
                             onChange={handleChange}
                         />
                         {errors.name && <div className="error">{errors.name}</div>}
 
                         <Input
-                            label="Business Email"
                             name="businessEmail"
                             type="email"
+                            placeholder="Business Email*"
                             value={formData.businessEmail}
                             onChange={handleChange}
                         />
@@ -166,56 +193,41 @@ const BookCall = () => {
                         )}
 
                         <Input
-                            label="Phone Number"
                             name="phoneNumber"
+                            placeholder="Phone Number*"
                             value={formData.phoneNumber}
                             onChange={handleChange}
                         />
+                        {errors.phoneNumber && <div className="error">{errors.phoneNumber}</div>}
 
                         <Input
-                            label="Website"
                             name="website"
+                            placeholder="Website*"
                             value={formData.website}
                             onChange={handleChange}
                         />
+                        {errors.website && <div className="error">{errors.website}</div>}
 
                         <Input
-                            label="Company Name"
+                            name="googleMapsLink"
+                            type="url"
+                            placeholder="Your Google Maps URL*"
+                            value={formData.googleMapsLink}
+                            onChange={handleChange}
+                        />
+                        {errors.googleMapsLink && (
+                            <div className="error">{errors.googleMapsLink}</div>
+                        )}
+
+                        <Input
                             name="companyName"
+                            placeholder="Company Name*"
                             value={formData.companyName}
                             onChange={handleChange}
                         />
-
-                        <fieldset>
-                            <legend>Can you afford a $997 USD 30-day paid trial?</legend>
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="canAffordTrial"
-                                    value="yes"
-                                    checked={formData.canAffordTrial === "yes"}
-                                    onChange={handleChange}
-                                />
-                                Yes
-                            </label>
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="canAffordTrial"
-                                    value="no"
-                                    checked={formData.canAffordTrial === "no"}
-                                    onChange={handleChange}
-                                />
-                                No
-                            </label>
-                        </fieldset>
-
-                        <TextArea
-                            label="What problem are you experiencing?"
-                            name="currentProblem"
-                            value={formData.currentProblem}
-                            onChange={handleChange}
-                        />
+                        {errors.companyName && (
+                            <div className="error">{errors.companyName}</div>
+                        )}
 
                         <fieldset>
                             <legend>When do you want to solve this?</legend>
@@ -250,6 +262,10 @@ const BookCall = () => {
                                 In a few weeks
                             </label>
                         </fieldset>
+                        {errors.solveTimeline && (
+                            <div className="error">{errors.solveTimeline}</div>
+                        )}
+
 
                         {submitError && <div className="error">{submitError}</div>}
                         {submitSuccess && (

@@ -20,6 +20,7 @@ body {
     color: var(--color-text);
     line-height: 1.65;
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 /* ✅ Because navbar is fixed now */
@@ -39,7 +40,7 @@ h3 {
 }
 
 h1 {
-    font-size: clamp(2.3rem, 5vw, 3.4rem);
+    font-size: clamp(2.3rem, 2vw, 3.4rem);
 }
 
 h2 {
@@ -465,4 +466,283 @@ legend {
     background: rgba(34, 197, 94, 0.1);
     color: #22c55e;
     font-size: 0.9rem;
+}
+
+/* =========================
+   BOOK CALL – LAYOUT & HERO
+   (Overrides / Additions)
+========================= */
+
+.book-call-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.8fr;
+    gap: 1.5rem;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 6rem 1.25rem;
+    padding-top: 2rem;
+    align-items: start;
+}
+
+/* =========================
+   LEFT COLUMN (COPY)
+========================= */
+
+.book-call-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+/* Badge / label */
+.free-stuff {
+    display: inline-block;
+    align-self: flex-start;
+
+    background: var(--color-bg-card);
+    color: var(--color-accent);
+
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+
+    padding: 0.35rem 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* Big hero headline */
+.book-call-h1 {
+    font-family: var(--font-sans);
+    /* Inter */
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: clamp(3.6rem, 10vw, 5.6rem);
+    line-height: 1.05;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+/* Subtitle */
+.book-call-copy h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+/* Paragraphs */
+.book-call-copy p {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    max-width: 520px;
+}
+
+/* =========================
+   RIGHT COLUMN (FORM)
+========================= */
+
+.book-call-form {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+    .book-call-grid {
+        grid-template-columns: 1fr;
+        padding: 4rem 1.25rem;
+    }
+
+    .book-call-h1 {
+        font-size: clamp(2.6rem, 8vw, 3.2rem);
+    }
+
+    .book-call-form {
+        padding: 2rem;
+    }
+}
+
+.book-call-form form {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.book-call-copy h2 {
+    margin: 0;
+}
+
+.book-call-copy p {
+    margin: 0;
+}
+
+/* =========================
+   BOOK CALL – MINIMAL INPUTS
+========================= */
+/* Hide label text but keep structure */
+.book-call-form label span {
+    display: none;
+}
+
+/* Minimal underline inputs (all types) */
+.book-call-form input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+
+    padding: 0.75rem 0;
+    font-size: 0.95rem;
+    color: var(--color-text);
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.book-call-form input::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.6;
+}
+
+.book-call-form input:focus {
+    outline: none;
+    border-bottom-color: var(--color-accent);
+    box-shadow: 0 1px 0 0 var(--color-accent);
+}
+
+/* =========================
+   HORIZONTAL FIELDSETS
+   (Radio on top, label below)
+========================= */
+
+.book-call-form fieldset {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    border: none;
+    padding: 0;
+    margin: 2rem 0 1.5rem;
+}
+
+/* Legend as subtle section label */
+.book-call-form legend {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-right: 1.25rem;
+    margin-bottom: 1.25rem;
+    white-space: nowrap;
+}
+
+/* Each option: vertical stack */
+.book-call-form fieldset label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+
+    font-size: 0.75rem;
+    color: var(--color-text);
+    cursor: pointer;
+    text-align: center;
+}
+
+/* Radio input */
+.book-call-form input[type="radio"] {
+    accent-color: var(--color-accent);
+    cursor: pointer;
+}
+
+.book-call-form input[aria-invalid="true"] {
+    border-bottom-color: #f87171;
+    box-shadow: 0 1px 0 0 #f87171;
+}
+
+/* =========================
+   CTA SECTION (CARD STYLE)
+========================= */
+
+.cta-section {
+    padding: 6rem 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.cta-card {
+    width: 100%;
+    max-width: 760px;
+
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.25rem;
+
+    padding: 3.5rem 2.5rem;
+    text-align: center;
+
+    backdrop-filter: blur(6px);
+}
+
+/* Badge */
+.cta-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    margin-bottom: 1.5rem;
+
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+}
+
+/* Title */
+.cta-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+    color: var(--color-text);
+}
+
+/* Main description */
+.cta-description {
+    max-width: 600px;
+    margin: 0 auto 1rem;
+
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+}
+
+/* Sub text */
+.cta-subtext {
+    margin-bottom: 2.5rem;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+}
+
+/* CTA button spacing */
+.cta-button {
+    padding: 0.9rem 2rem;
+    border-radius: 999px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 640px) {
+    .cta-card {
+        padding: 2.5rem 1.75rem;
+    }
 }

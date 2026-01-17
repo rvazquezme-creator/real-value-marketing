@@ -81,7 +81,7 @@ const Navbar = () => {
                     </li>
                     <li>
                         <Link to="/book-a-call" className="nav-cta" onClick={() => setOpen(false)}>
-                            Book a Call
+                            Get Your FREE Analysis
                         </Link>
                     </li>
                 </ul>
