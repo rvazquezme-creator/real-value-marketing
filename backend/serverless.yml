@@ -5,19 +5,19 @@ provider:
   runtime: nodejs18.x
   region: us-east-1
   stage: dev
-  httpApi:
-  cors:
-    allowedOrigins:
-      - http://localhost:5173
-      - https://realvaluemarketing.com
-      - https://www.realvaluemarketing.com
-    allowedMethods:
-      - GET
-      - POST
-      - OPTIONS
-    allowedHeaders:
-      - Content-Type
 
+  httpApi:
+    cors:
+      allowedOrigins:
+        - http://localhost:5173
+        - https://realvaluemarketing.com
+        - https://www.realvaluemarketing.com
+      allowedMethods:
+        - GET
+        - POST
+        - OPTIONS
+      allowedHeaders:
+        - Content-Type
 
   environment:
     ODOO_URL: ${env:ODOO_URL}
