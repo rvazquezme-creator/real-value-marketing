@@ -10,7 +10,9 @@ on:
 
 jobs:
   deploy:
+    name: Deploy (dev)
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: backend
@@ -38,3 +40,5 @@ jobs:
 
       - name: Deploy (dev)
         run: npx serverless deploy --stage dev
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}

@@ -1,7 +1,5 @@
 service: your-app-api
 
-frameworkVersion: "3"
-
 provider:
   name: aws
   runtime: nodejs18.x
