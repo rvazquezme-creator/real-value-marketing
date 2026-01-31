@@ -1,0 +1,30 @@
+service: your-app-api
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: dev
+  httpApi:
+    cors: true
+
+plugins:
+  - serverless-esbuild
+
+custom:
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    platform: node
+    target: node18
+
+functions:
+  api:
+    handler: src/handler.api
+    events:
+      - httpApi:
+          path: /health
+          method: GET
