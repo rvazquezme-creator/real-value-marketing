@@ -41,4 +41,15 @@ jobs:
       - name: Deploy (dev)
         run: npx serverless deploy --stage dev
         env:
+          # Serverless v4 auth
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+
+          # Backend secrets (OBLIGATORIOS)
+          ODOO_URL: ${{ secrets.ODOO_URL }}
+          ODOO_DB: ${{ secrets.ODOO_DB }}
+          ODOO_USER: ${{ secrets.ODOO_USER }}
+          ODOO_PASSWORD: ${{ secrets.ODOO_PASSWORD }}
+
+          # CORS origins
+          FRONTEND_ORIGIN: ${{ vars.FRONTEND_ORIGIN }}
+          FRONTEND_ORIGIN_WWW: ${{ vars.FRONTEND_ORIGIN_WWW }}
