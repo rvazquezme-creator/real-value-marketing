@@ -10,17 +10,23 @@ const ProcessSteps = () => {
                 {/* Animated line */}
                 <svg
                     className="process-line-svg"
-                    viewBox="0 0 1000 200"
+                    viewBox="0 0 1200 260"
                     preserveAspectRatio="none"
                 >
                     <path
-                        d="M 80 100 C 320 40, 680 40, 920 100"
+                        className="process-line-path"
+                        d="
+                            M 80 130
+                            C 260 40, 420 40, 600 130
+                            C 780 220, 940 220, 1120 130
+                        "
                         fill="none"
                         stroke="var(--color-accent)"
                         strokeWidth="3"
                         strokeLinecap="round"
                     />
                 </svg>
+
 
                 {/* Steps */}
                 <div className="process-timeline">
