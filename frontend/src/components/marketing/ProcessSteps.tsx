@@ -7,18 +7,18 @@ const ProcessSteps = () => {
             </div>
 
             <div className="process-timeline-wrapper">
-                {/* Animated electric line */}
+                {/* SVG LINE — ICON LEVEL */}
                 <svg
                     className="process-line-svg"
-                    viewBox="0 0 1200 260"
+                    viewBox="0 0 1200 120"
                     preserveAspectRatio="none"
                 >
                     <path
                         className="process-line-path"
                         d="
-                            M 100 130
-                            C 320 60, 480 60, 600 130
-                            C 720 200, 880 200, 1100 130
+                            M 120 60
+                            C 360 10, 480 10, 600 60
+                            C 720 110, 840 110, 1080 60
                         "
                         fill="none"
                     />
