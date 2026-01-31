@@ -1,25 +1,25 @@
 const services = [
     {
-        title: "Lead Generation Systems",
+        title: "Targeted Marketing",
         description:
-            "We design predictable systems that turn traffic into qualified leads.",
+            "We run Facebook and Google campaings targeted only to get paid clients on your local area.",
     },
     {
-        title: "Paid Ads Optimization",
+        title: "We turn attention into $",
         description:
-            "We scale what works and cut what doesn’t using data-driven decisions.",
+            "We'll show you a simple system to close high value clients and disregard time wasters.",
     },
     {
-        title: "Conversion Rate Optimization",
+        title: "Google Business Profile ranked on top 10",
         description:
-            "We increase conversion across funnels, landing pages, and offers.",
+            "We'll get your GBP ranked higher, to build local authority and attract more high value customers.",
     },
 ];
 
 const ServicesGrid = () => {
     return (
         <section>
-            <h2>What We Do</h2>
+            <h2>How do we get you more clients?</h2>
 
             <div className="cards-grid">
                 {services.map((service, index) => (

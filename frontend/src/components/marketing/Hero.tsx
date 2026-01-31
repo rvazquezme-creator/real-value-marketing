@@ -11,7 +11,7 @@ const Hero = () => {
                 </h1>
 
                 <p>
-                    We'll get your PMU business (US only) 20% more clients and Top 10 Google Maps results within 90 days for your service area—or we work for free until you do.
+                    We'll get your local PMU business 20% more clients within 90 day or we'll work for free until you do
                 </p>
 
                 <Link className="button" to="/#cta">
