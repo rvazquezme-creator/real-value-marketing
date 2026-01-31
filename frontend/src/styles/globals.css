@@ -796,10 +796,12 @@ legend {
 
 .process-line-svg {
     position: absolute;
-    top: 28px;
-    /* 🔑 aligns with icon centers */
+    top: 0px;
     left: 0;
     width: 100%;
+    max-width: 900px;
+    left: 50%;
+    transform: translateX(-50%);
     height: 120px;
     z-index: 1;
     pointer-events: none;
