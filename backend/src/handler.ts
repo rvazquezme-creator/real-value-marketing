@@ -1,11 +1,4 @@
-export const api = async () => {
-    return {
-        statusCode: 200,
-        headers: {
-            "access-control-allow-origin": "*",
-            "access-control-allow-headers": "*",
-            "access-control-allow-methods": "*",
-        },
-        body: JSON.stringify({ ok: true, service: "api" }),
-    };
-};
+import serverless from "serverless-http";
+import app from "./app.js";
+
+export const api = serverless(app);
