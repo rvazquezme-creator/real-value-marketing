@@ -6,7 +6,18 @@ provider:
   region: us-east-1
   stage: dev
   httpApi:
-    cors: true
+  cors:
+    allowedOrigins:
+      - http://localhost:5173
+      - https://realvaluemarketing.com
+      - https://www.realvaluemarketing.com
+    allowedMethods:
+      - GET
+      - POST
+      - OPTIONS
+    allowedHeaders:
+      - Content-Type
+
 
   environment:
     ODOO_URL: ${env:ODOO_URL}

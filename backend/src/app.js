@@ -17,58 +17,10 @@ process.on("uncaughtException", (err) => {
 });
 
 /* =========================
-   CORS (PROD + DEV)
+   CORS
+   (Handled by API Gateway HTTP API)
 ========================= */
-const allowedOrigins = [
-    process.env.FRONTEND_ORIGIN,          // https://realvaluemarketing.com
-    process.env.FRONTEND_ORIGIN_WWW,      // https://www.realvaluemarketing.com
-    "http://localhost:5173",
-].filter(Boolean);
-
-app.use(
-    cors({
-        origin(origin, callback) {
-            // Allow requests with no origin (curl, health checks, server-to-server)
-            if (!origin) return callback(null, true);
-
-            if (allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            }
-
-            console.warn("❌ CORS blocked origin:", origin);
-            return callback(new Error("CORS blocked"));
-        },
-        methods: ["GET", "POST", "OPTIONS"],
-        allowedHeaders: ["Content-Type"],
-        credentials: false,
-    })
-);
-
-/* =========================
-   FORCE CORS HEADERS (LAMBDA SAFETY)
-========================= */
-app.use((req, res, next) => {
-    res.header(
-        "Access-Control-Allow-Origin",
-        req.headers.origin || "*"
-    );
-    res.header(
-        "Access-Control-Allow-Methods",
-        "GET,POST,OPTIONS"
-    );
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Content-Type"
-    );
-    next();
-});
-
-/* =========================
-   PRE-FLIGHT (MUST RETURN 200)
-========================= */
-app.options("*", (_req, res) => {
-    return res.sendStatus(200);
-});
+app.use(cors());
 
 /* =========================
    BODY PARSER
@@ -95,13 +47,6 @@ app.use("/api", bookCallRoutes);
    ERROR HANDLER (LAST)
 ========================= */
 app.use((err, _req, res, _next) => {
-    if (String(err?.message || "").startsWith("CORS blocked")) {
-        return res.status(403).json({
-            success: false,
-            message: "CORS not allowed",
-        });
-    }
-
     console.error("❌ Express error:", err);
     res.status(500).json({
         success: false,
