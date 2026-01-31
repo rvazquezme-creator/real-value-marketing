@@ -7,7 +7,7 @@ const ProcessSteps = () => {
             </div>
 
             <div className="process-timeline-wrapper">
-                {/* Animated line */}
+                {/* Animated electric line */}
                 <svg
                     className="process-line-svg"
                     viewBox="0 0 1200 260"
@@ -16,22 +16,19 @@ const ProcessSteps = () => {
                     <path
                         className="process-line-path"
                         d="
-                            M 80 130
-                            C 260 40, 420 40, 600 130
-                            C 780 220, 940 220, 1120 130
+                            M 100 130
+                            C 320 60, 480 60, 600 130
+                            C 720 200, 880 200, 1100 130
                         "
                         fill="none"
-                        stroke="var(--color-accent)"
-                        strokeWidth="3"
-                        strokeLinecap="round"
                     />
                 </svg>
 
-
-                {/* Steps */}
                 <div className="process-timeline">
                     <div className="process-step">
-                        <div className="process-icon">◆</div>
+                        <div className="process-icon-card">
+                            <div className="process-icon">◆</div>
+                        </div>
                         <h3>90-Day Roadmap</h3>
                         <p>
                             We audit your current GBP, analyze your competition,
@@ -39,8 +36,10 @@ const ProcessSteps = () => {
                         </p>
                     </div>
 
-                    <div className="process-step">
-                        <div className="process-icon">⬤</div>
+                    <div className="process-step process-step--offset">
+                        <div className="process-icon-card">
+                            <div className="process-icon">⬤</div>
+                        </div>
                         <h3>We Handle Everything</h3>
                         <p>
                             Daily optimization, reviews, content, and fixes —
@@ -49,7 +48,9 @@ const ProcessSteps = () => {
                     </div>
 
                     <div className="process-step">
-                        <div className="process-icon">▤</div>
+                        <div className="process-icon-card">
+                            <div className="process-icon">▤</div>
+                        </div>
                         <h3>Track Your Climb</h3>
                         <p>
                             Weekly ranking updates show exactly where you stand.

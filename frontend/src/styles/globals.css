@@ -763,13 +763,10 @@ legend {
 .process-badge {
     display: inline-block;
     margin-bottom: 1rem;
-
     padding: 0.35rem 0.9rem;
     border-radius: 999px;
-
     background: var(--color-bg-card);
     border: 1px solid var(--color-border);
-
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -794,34 +791,30 @@ legend {
 }
 
 /* =========================
-   ELECTRIC SVG LINE (S-CURVE)
+   ELECTRIC SVG LINE
 ========================= */
 
 .process-line-svg {
     position: absolute;
-    top: 60px;
+    top: 54px;
+    /* aligns with icon centers */
     left: 0;
     width: 100%;
     height: 260px;
-
     z-index: 1;
     pointer-events: none;
 }
 
-/* Electric animated path */
 .process-line-path {
     stroke: var(--color-accent);
     stroke-width: 3;
     stroke-linecap: round;
-
     stroke-dasharray: 8 14;
     animation: electricFlow 3.2s linear infinite;
-
     filter:
         drop-shadow(0 0 6px rgba(230, 193, 90, 0.45)) drop-shadow(0 0 14px rgba(230, 193, 90, 0.25));
 }
 
-/* Continuous electric motion */
 @keyframes electricFlow {
     from {
         stroke-dashoffset: 0;
@@ -839,73 +832,65 @@ legend {
 .process-timeline {
     position: relative;
     z-index: 2;
-    /* above the line */
-
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem;
+    gap: 3rem;
     align-items: start;
 }
 
 /* =========================
-   STEP CARD (LIGHTWEIGHT)
+   STEP (ICON + TEXT SEPARATED)
 ========================= */
 
 .process-step {
-    background: var(--color-bg-card);
-    /* sólido */
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-
-    padding: 1.6rem 1.6rem;
-    /* 👈 menos padding vertical */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-
-    position: relative;
-    z-index: 2;
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
 }
 
-.process-step:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+/* vertical offset for middle step */
+.process-step--offset {
+    margin-top: 36px;
 }
 
 /* =========================
-   ICON
+   ICON CARD (ONLY ICON)
 ========================= */
 
-.process-icon {
-    width: 52px;
-    height: 52px;
-    margin: 0 auto 1.2rem;
+.process-icon-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.2rem;
+    margin-bottom: 1.25rem;
+}
 
+.process-icon {
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    border-radius: 14px;
+    border-radius: 12px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid var(--color-border);
-
-    font-size: 1.4rem;
+    font-size: 1.25rem;
     color: var(--color-accent);
 }
 
 /* =========================
-   TEXT
+   TEXT OUTSIDE CARD
 ========================= */
 
 .process-step h3 {
     font-size: 1.05rem;
     font-weight: 700;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
 }
 
 .process-step p {
+    max-width: 280px;
     font-size: 0.95rem;
     color: var(--color-text-muted);
     line-height: 1.55;
@@ -922,6 +907,10 @@ legend {
 
     .process-timeline {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 2.5rem;
+    }
+
+    .process-step--offset {
+        margin-top: 0;
     }
 }
