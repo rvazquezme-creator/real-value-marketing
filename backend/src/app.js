@@ -45,12 +45,38 @@ app.use(
 );
 
 /* =========================
-   MIDDLEWARES
+   FORCE CORS HEADERS (LAMBDA SAFETY)
+========================= */
+app.use((req, res, next) => {
+    res.header(
+        "Access-Control-Allow-Origin",
+        req.headers.origin || "*"
+    );
+    res.header(
+        "Access-Control-Allow-Methods",
+        "GET,POST,OPTIONS"
+    );
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Content-Type"
+    );
+    next();
+});
+
+/* =========================
+   PRE-FLIGHT (MUST RETURN 200)
+========================= */
+app.options("*", (_req, res) => {
+    return res.sendStatus(200);
+});
+
+/* =========================
+   BODY PARSER
 ========================= */
 app.use(express.json({ limit: "1mb" }));
 
 /* =========================
-   HEALTH CHECK (MUST ALWAYS WORK)
+   HEALTH CHECK
 ========================= */
 app.get("/health", (_req, res) => {
     res.status(200).json({
