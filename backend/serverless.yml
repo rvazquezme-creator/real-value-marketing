@@ -17,6 +17,10 @@ provider:
       allowedMethods:
         - POST
         - OPTIONS
+        
+    throttling:
+      burstLimit: 5
+      rateLimit: 2
 
   environment:
     ODOO_URL: ${param:odoo_url}
