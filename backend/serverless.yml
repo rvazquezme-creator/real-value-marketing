@@ -7,15 +7,19 @@ provider:
   stage: ${opt:stage, 'dev'}
 
   # =========================
-  # REST API (v1)
+  # HTTP API (v2)
   # =========================
-  apiGateway:
-    shouldStartNameWithService: true
-
-    # 🔒 RATE LIMIT REAL
-    throttling:
-      rateLimit: 2        # requests por segundo
-      burstLimit: 5       # picos permitidos
+  httpApi:
+    cors:
+      allowedOrigins:
+        - https://realvaluemarketing.com
+        - https://www.realvaluemarketing.com
+        - http://localhost:5173
+      allowedHeaders:
+        - Content-Type
+      allowedMethods:
+        - POST
+        - OPTIONS
 
   environment:
     ODOO_URL: ${param:odoo_url}
@@ -23,6 +27,9 @@ provider:
     ODOO_USER: ${param:odoo_user}
     ODOO_PASSWORD: ${param:odoo_password}
 
+# =========================
+# PACKAGE
+# =========================
 package:
   patterns:
     - '!.env'
@@ -32,17 +39,17 @@ package:
     - '!README.md'
     - '!node_modules/**'
 
+# =========================
+# FUNCTIONS
+# =========================
 functions:
   createLead:
     handler: src/handler.createLead
+
+    # 🛡️ CAPA 1 — Anti-spam real y gratis
+    reservedConcurrency: 2
+
     events:
-      - http:
-          path: leads
-          method: post
-          cors:
-            origins:
-              - https://realvaluemarketing.com
-              - https://www.realvaluemarketing.com
-              - http://localhost:5173
-            headers:
-              - Content-Type
+      - httpApi:
+          path: /leads
+          method: POST
