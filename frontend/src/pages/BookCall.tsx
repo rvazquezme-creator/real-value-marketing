@@ -2,14 +2,22 @@ import { useState } from "react";
 import PageWrapper from "../components/layout/PageWrapper";
 
 import Input from "../components/ui/Input";
-// import TextArea from "../components/ui/TextArea";
 import Button from "../components/ui/Button";
 
 import type { BookCallFormData } from "../types/forms";
 
-const API_URL =
-    import.meta.env.VITE_API_URL || "http://localhost:3001";
+/* =========================
+   API CONFIG
+========================= */
+const API_URL = import.meta.env.VITE_API_URL;
 
+if (!API_URL) {
+    throw new Error("VITE_API_URL is not defined");
+}
+
+/* =========================
+   FAQ DATA
+========================= */
 const faqs = [
     {
         q: "Is this really free?",
@@ -29,6 +37,9 @@ const faqs = [
     },
 ];
 
+/* =========================
+   INITIAL STATE
+========================= */
 const initialFormState: BookCallFormData = {
     name: "",
     businessEmail: "",
@@ -43,16 +54,23 @@ const initialFormState: BookCallFormData = {
 
 type FormErrors = Partial<Record<keyof BookCallFormData, string>>;
 
+const ALLOWED_TIMELINES = ["today", "tomorrow", "few_weeks"];
+
+/* =========================
+   COMPONENT
+========================= */
 const BookCall = () => {
     const [formData, setFormData] =
         useState<BookCallFormData>(initialFormState);
 
     const [errors, setErrors] = useState<FormErrors>({});
-
     const [submitting, setSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
 
+    /* =========================
+       HANDLERS
+    ========================= */
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
@@ -104,13 +122,12 @@ const BookCall = () => {
             newErrors.companyName = "Company name is required.";
         }
 
-        if (!formData.solveTimeline) {
-            newErrors.solveTimeline = "Please select a timeline.";
+        if (!ALLOWED_TIMELINES.includes(formData.solveTimeline)) {
+            newErrors.solveTimeline = "Please select a valid timeline.";
         }
 
         return newErrors;
     };
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -125,7 +142,7 @@ const BookCall = () => {
             setSubmitting(true);
             setSubmitError(null);
 
-            const res = await fetch(`${API_URL}/api/book-call`, {
+            const res = await fetch(`${API_URL}/leads`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -141,14 +158,15 @@ const BookCall = () => {
             setFormData(initialFormState);
         } catch (err) {
             console.error(err);
-            setSubmitError(
-                "Something went wrong. Please try again later."
-            );
+            setSubmitError("Something went wrong. Please try again later.");
         } finally {
             setSubmitting(false);
         }
     };
 
+    /* =========================
+       RENDER
+    ========================= */
     return (
         <PageWrapper>
             <section className="book-call-grid">
@@ -158,7 +176,7 @@ const BookCall = () => {
                     <h1 className="book-call-h1">Get Your Profile Analyzed</h1>
                     <h2>Let’s Make Money</h2>
                     <p>
-                        Fill out the form to see if you area is still available. If it is,
+                        Fill out the form to see if your area is still available. If it is,
                         we'll tell you the exact things that need to happen so you can get
                         20% more customers.
                     </p>
@@ -172,7 +190,6 @@ const BookCall = () => {
                 {/* RIGHT */}
                 <div className="book-call-form">
                     <form className="animate" onSubmit={handleSubmit} noValidate>
-
                         <Input
                             name="name"
                             placeholder="Your Name*"
@@ -198,7 +215,9 @@ const BookCall = () => {
                             value={formData.phoneNumber}
                             onChange={handleChange}
                         />
-                        {errors.phoneNumber && <div className="error">{errors.phoneNumber}</div>}
+                        {errors.phoneNumber && (
+                            <div className="error">{errors.phoneNumber}</div>
+                        )}
 
                         <Input
                             name="website"
@@ -231,6 +250,7 @@ const BookCall = () => {
 
                         <fieldset>
                             <legend>When do you want to solve this?</legend>
+
                             <label>
                                 <input
                                     type="radio"
@@ -241,6 +261,7 @@ const BookCall = () => {
                                 />
                                 Today
                             </label>
+
                             <label>
                                 <input
                                     type="radio"
@@ -251,6 +272,7 @@ const BookCall = () => {
                                 />
                                 Tomorrow
                             </label>
+
                             <label>
                                 <input
                                     type="radio"
@@ -262,10 +284,10 @@ const BookCall = () => {
                                 In a few weeks
                             </label>
                         </fieldset>
+
                         {errors.solveTimeline && (
                             <div className="error">{errors.solveTimeline}</div>
                         )}
-
 
                         {submitError && <div className="error">{submitError}</div>}
                         {submitSuccess && (

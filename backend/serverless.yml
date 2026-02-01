@@ -1,4 +1,4 @@
-service: rvm-api
+service: rvm-odoo-api
 
 provider:
   name: aws
@@ -10,14 +10,11 @@ provider:
     cors:
       allowedOrigins:
         - http://localhost:5173
-        - https://realvaluemarketing.com
-        - https://www.realvaluemarketing.com
-      allowedMethods:
-        - GET
-        - POST
-        - OPTIONS
       allowedHeaders:
         - Content-Type
+      allowedMethods:
+        - POST
+        - OPTIONS
 
   environment:
     ODOO_URL: ${env:ODOO_URL}
@@ -25,21 +22,10 @@ provider:
     ODOO_USER: ${env:ODOO_USER}
     ODOO_PASSWORD: ${env:ODOO_PASSWORD}
 
-    FRONTEND_ORIGIN: ${env:FRONTEND_ORIGIN}
-    FRONTEND_ORIGIN_WWW: ${env:FRONTEND_ORIGIN_WWW}
-
-build:
-  esbuild:
-    bundle: true
-    minify: false
-    sourcemap: true
-    platform: node
-    target: node18
-
 functions:
-  api:
-    handler: src/handler.api
+  createLead:
+    handler: src/handler.createLead
     events:
       - httpApi:
-          path: /{proxy+}
-          method: ANY
+          path: /leads
+          method: POST
