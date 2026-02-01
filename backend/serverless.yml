@@ -6,21 +6,16 @@ provider:
   region: us-east-1
   stage: ${opt:stage, 'dev'}
 
-  httpApi:
-    cors:
-      allowedOrigins:
-        - https://realvaluemarketing.com
-        - https://www.realvaluemarketing.com
-        - http://localhost:5173
-      allowedHeaders:
-        - Content-Type
-      allowedMethods:
-        - POST
-        - OPTIONS
-        
+  # =========================
+  # REST API (v1)
+  # =========================
+  apiGateway:
+    shouldStartNameWithService: true
+
+    # 🔒 RATE LIMIT REAL
     throttling:
-      burstLimit: 5
-      rateLimit: 2
+      rateLimit: 2        # requests por segundo
+      burstLimit: 5       # picos permitidos
 
   environment:
     ODOO_URL: ${param:odoo_url}
@@ -41,6 +36,13 @@ functions:
   createLead:
     handler: src/handler.createLead
     events:
-      - httpApi:
-          path: /leads
-          method: POST
+      - http:
+          path: leads
+          method: post
+          cors:
+            origins:
+              - https://realvaluemarketing.com
+              - https://www.realvaluemarketing.com
+              - http://localhost:5173
+            headers:
+              - Content-Type
