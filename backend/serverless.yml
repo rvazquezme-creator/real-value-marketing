@@ -9,6 +9,8 @@ provider:
   httpApi:
     cors:
       allowedOrigins:
+        - https://realvaluemarketing.com
+        - https://www.realvaluemarketing.com
         - http://localhost:5173
       allowedHeaders:
         - Content-Type
