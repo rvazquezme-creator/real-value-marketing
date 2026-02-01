@@ -1,9 +1,9 @@
-# Real Value Marketing – Website & WebApp
+# Real Value Marketing – Website & Serverless WebApp
 
-Landing page and lead generation web application connected to Odoo CRM.
+Landing page and lead generation web application connected to Odoo CRM using a **serverless backend on AWS**.
 
 This project is designed for B2B companies and business owners who want a clean,
-high-converting website with a professional CRM integration.
+high-converting website with a professional, scalable, and low-cost CRM integration.
 
 ---
 
@@ -13,7 +13,7 @@ high-converting website with a professional CRM integration.
 Real Value Marketing Website and WebApp
 
 **Objective:**  
-Landing page + lead generation system connected to Odoo CRM.
+High-conversion landing page + lead generation system connected to Odoo CRM via AWS Lambda.
 
 **Target audience:**  
 Business owners / B2B companies
@@ -32,11 +32,14 @@ https://realvaluemarketing.com
 - Custom CSS (no UI frameworks)
 - Deployed on **Vercel**
 
-### Backend
-- Node.js
-- Express
+### Backend (Serverless)
+- Node.js 18
+- AWS Lambda
+- AWS API Gateway (HTTP API)
+- Serverless Framework
 - Odoo JSON-RPC 2.0 API
-- Deployed on **Railway**
+- **No persistent servers**
+- **Pay-per-use (near-zero idle cost)**
 
 ---
 
@@ -46,16 +49,20 @@ This repository is a **monorepo** containing both frontend and backend:
 
 ```
 real-value-marketing/
-├── frontend/        # React + Vite frontend
+├── frontend/                # React + Vite frontend
 │   ├── src/
 │   ├── public/
 │   ├── package.json
 │   ├── vite.config.ts
 │   └── .env
 │
-├── backend/         # Node.js + Express API
-│   ├── server.js
-│   ├── odooClient.js
+├── backend/                 # Serverless AWS backend
+│   ├── src/
+│   │   ├── handler.js       # Lambda entrypoint
+│   │   ├── odooClient.js    # Odoo JSON-RPC client
+│   │   ├── validators.js    # Payload validation
+│   │   └── responses.js    # HTTP & CORS helpers
+│   ├── serverless.yml       # AWS infrastructure definition
 │   ├── package.json
 │   └── .env
 │
@@ -76,25 +83,26 @@ Each folder is an **independent Node.js project** with its own dependencies.
 
 ### Book a Call (Lead Generation)
 - Form with inline validation UX
-- Sends data to backend API
+- Sends data to AWS Lambda via API Gateway
 - Creates CRM leads in Odoo
 
 ### Odoo CRM Integration
-When a user submits the Book a Call form:
-1. Searches for an existing contact by email
+When a user submits the **Book a Call** form:
+
+1. Searches for an existing company or contact
 2. If not found:
-   - Creates a company (parent)
+   - Creates a company (parent partner)
    - Creates a contact linked to that company
 3. Creates a CRM lead linked to the contact
 
-This prevents duplicate contacts and keeps CRM data clean.
+This prevents duplicate contacts and keeps CRM data clean and structured.
 
 ### Newsletter
-- Placeholder form for now
+- Placeholder form
 - Ready for future integration
 
 ### Blog
-- Static / mock data for now
+- Static / mock data
 - Ready for future CMS or API integration
 
 > ⚠️ All current data is **test data only**.
@@ -109,20 +117,22 @@ ODOO_URL=https://your-odoo-instance.odoo.com
 ODOO_DB=your_database_name
 ODOO_USER=your_user_email
 ODOO_PASSWORD=your_password
-FRONTEND_ORIGIN=https://realvaluemarketing.com
-FRONTEND_ORIGIN_WWW=https://www.realvaluemarketing.com
 ```
+
+> AWS credentials are **not committed** and should be configured via:
+> - Environment variables (development only), or
+> - AWS CLI profiles (recommended for production)
 
 ---
 
 ### Frontend (`/frontend/.env`)
 ```env
-VITE_API_URL=https://your-backend-url
+VITE_API_URL=https://your-api-gateway-url
 ```
 
 Example (local development):
 ```env
-VITE_API_URL=http://localhost:3001
+VITE_API_URL=http://localhost:5173
 ```
 
 ---
@@ -143,21 +153,34 @@ http://localhost:5173
 
 ---
 
-### Backend
+### Backend (Local Lambda Invocation)
 ```bash
 cd backend
 npm install
-node server.js
-```
-
-Runs on:
-```
-http://localhost:3001
+npx serverless invoke local -f createLead -p event.json
 ```
 
 ---
 
 ## 🚀 Deployment
+
+### Backend (AWS – Serverless)
+```bash
+cd backend
+npx serverless deploy
+```
+
+This deploys:
+- AWS Lambda function
+- API Gateway HTTP endpoint
+- CloudWatch logs
+
+Example endpoint:
+```
+POST https://xxxx.execute-api.us-east-1.amazonaws.com/leads
+```
+
+---
 
 ### Frontend (Vercel)
 - Import GitHub repository
@@ -170,49 +193,38 @@ http://localhost:3001
   ```
   dist
   ```
-- Add environment variables in Vercel:
+- Add environment variable:
   ```
-  VITE_API_URL=https://your-backend-url
+  VITE_API_URL=https://your-api-gateway-url
   ```
-
----
-
-### Backend (Railway)
-- Import the same GitHub repository
-- Set **Root Directory** to `backend`
-- Start command:
-  ```
-  node server.js
-  ```
-- Add backend environment variables in Railway dashboard
 
 ---
 
 ## 🔐 Security Notes
 
-- Secrets are stored only in backend `.env`
 - Frontend never communicates directly with Odoo
-- CORS is configured for frontend → backend communication
+- All Odoo credentials live only in AWS Lambda
+- CORS is enforced at API Gateway level
+- No long-running servers
 - `.env` files are excluded from version control
 
 ---
 
 ## 📦 Repository Status
 
-- Repository visibility: **Public**
-- Project ownership: **Client-owned**
+- Repository visibility: **Private / Client-owned**
+- Infrastructure: **AWS account owned by client**
 - All credentials and sensitive data are excluded
 
 ---
 
 ## 📌 Notes
 
-- Newsletter and blog currently use placeholder data
-- Ready for future expansion:
-  - CMS integration
-  - Marketing automation
-  - Advanced CRM workflows
-  - Analytics & tracking
+This architecture is designed to be:
+- Cost-efficient
+- Scalable
+- Easy to migrate between AWS accounts
+- Production-ready for B2B lead generation
 
 ---
 
