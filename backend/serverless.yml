@@ -45,10 +45,6 @@ package:
 functions:
   createLead:
     handler: src/handler.createLead
-
-    # 🛡️ CAPA 1 — Anti-spam real y gratis
-    reservedConcurrency: 2
-
     events:
       - httpApi:
           path: /leads
