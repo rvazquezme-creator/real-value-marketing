@@ -3,7 +3,7 @@
 Landing page and lead generation web application connected to Odoo CRM using a **serverless backend on AWS**.
 
 This project is designed for B2B companies and business owners who want a clean,
-high-converting website with a professional, scalable, and low-cost CRM integration.
+high‑converting website with a professional, scalable, and low‑cost CRM integration.
 
 ---
 
@@ -13,7 +13,7 @@ high-converting website with a professional, scalable, and low-cost CRM integrat
 Real Value Marketing Website and WebApp
 
 **Objective:**  
-High-conversion landing page + lead generation system connected to Odoo CRM via AWS Lambda.
+High‑conversion landing page + lead generation system connected to Odoo CRM via AWS Lambda.
 
 **Target audience:**  
 Business owners / B2B companies
@@ -35,36 +35,83 @@ https://realvaluemarketing.com
 ### Backend (Serverless)
 - Node.js 18
 - AWS Lambda
-- AWS API Gateway (HTTP API)
-- Serverless Framework
-- Odoo JSON-RPC 2.0 API
+- AWS API Gateway (**HTTP API**)
+- Serverless Framework (v4)
+- Odoo JSON‑RPC 2.0 API
 - **No persistent servers**
-- **Pay-per-use (near-zero idle cost)**
+- **Pay‑per‑use (near‑zero idle cost)**
 
 ---
 
 ## 📁 Project Structure
 
-This repository is a **monorepo** containing both frontend and backend:
+This repository is a **monorepo** containing both frontend and backend.
+
+### Full structure
 
 ```
 real-value-marketing/
-├── frontend/                # React + Vite frontend
-│   ├── src/
-│   ├── public/
+├── backend
+│   ├── event.json                 # Sample event for local Lambda testing
 │   ├── package.json
-│   ├── vite.config.ts
-│   └── .env
+│   ├── package-lock.json
+│   ├── serverless.yml             # AWS infrastructure definition
+│   └── src
+│       ├── handler.js             # Lambda entrypoint
+│       ├── odooClient.js          # Odoo JSON-RPC client
+│       ├── responses.js           # HTTP + CORS helpers
+│       └── validators.js          # Payload validation
 │
-├── backend/                 # Serverless AWS backend
-│   ├── src/
-│   │   ├── handler.js       # Lambda entrypoint
-│   │   ├── odooClient.js    # Odoo JSON-RPC client
-│   │   ├── validators.js    # Payload validation
-│   │   └── responses.js    # HTTP & CORS helpers
-│   ├── serverless.yml       # AWS infrastructure definition
+├── frontend
+│   ├── eslint.config.js
+│   ├── index.html
 │   ├── package.json
-│   └── .env
+│   ├── package-lock.json
+│   ├── public
+│   │   ├── cropped_circle_image.svg
+│   │   ├── favicon.svg
+│   │   ├── robots.txt
+│   │   └── vite.svg
+│   ├── src
+│   │   ├── App.tsx
+│   │   ├── App.css
+│   │   ├── main.tsx
+│   │   ├── index.css
+│   │   ├── assets
+│   │   │   ├── icons
+│   │   │   ├── images
+│   │   │   └── logos
+│   │   ├── components
+│   │   │   ├── layout
+│   │   │   ├── marketing
+│   │   │   └── ui
+│   │   ├── data
+│   │   │   ├── blogPosts.ts
+│   │   │   ├── faq.ts
+│   │   │   └── services.ts
+│   │   ├── hooks
+│   │   │   ├── useScrollReveal.ts
+│   │   │   └── useScrollToTop.ts
+│   │   ├── pages
+│   │   │   ├── Home.tsx
+│   │   │   ├── BookCall.tsx
+│   │   │   ├── Newsletter.tsx
+│   │   │   └── Blog
+│   │   ├── router
+│   │   │   └── AppRouter.tsx
+│   │   ├── styles
+│   │   │   ├── globals.css
+│   │   │   └── variables.css
+│   │   ├── types
+│   │   │   ├── blog.ts
+│   │   │   └── forms.ts
+│   │   └── utils
+│   │       └── validators.ts
+│   ├── tsconfig.json
+│   ├── tsconfig.app.json
+│   ├── tsconfig.node.json
+│   ├── vercel.json
+│   └── vite.config.ts
 │
 ├── README.md
 └── .gitignore
@@ -79,7 +126,7 @@ Each folder is an **independent Node.js project** with its own dependencies.
 ### Website
 - Modern, responsive landing page
 - Animated UI and smooth scrolling
-- Clear CTA-focused design
+- Clear CTA‑focused design
 
 ### Book a Call (Lead Generation)
 - Form with inline validation UX
@@ -97,15 +144,18 @@ When a user submits the **Book a Call** form:
 
 This prevents duplicate contacts and keeps CRM data clean and structured.
 
-### Newsletter
-- Placeholder form
-- Ready for future integration
+---
 
-### Blog
-- Static / mock data
-- Ready for future CMS or API integration
+## 🛡️ Anti‑Spam & Reliability
 
-> ⚠️ All current data is **test data only**.
+This project relies on **AWS‑native protections**, without paid services:
+
+- AWS Lambda **account‑level concurrency limits** cap parallel executions
+- Burst or bot traffic is automatically rejected by AWS
+- Protects Odoo from overload
+- No API keys, no WAF, no additional cost
+
+This provides **implicit rate limiting**, ideal for B2B lead forms.
 
 ---
 
@@ -119,20 +169,11 @@ ODOO_USER=your_user_email
 ODOO_PASSWORD=your_password
 ```
 
-> AWS credentials are **not committed** and should be configured via:
-> - Environment variables (development only), or
-> - AWS CLI profiles (recommended for production)
-
----
+> AWS credentials are **not committed** and should be configured via AWS CLI profiles or temporary environment variables.
 
 ### Frontend (`/frontend/.env`)
 ```env
 VITE_API_URL=https://your-api-gateway-url
-```
-
-Example (local development):
-```env
-VITE_API_URL=http://localhost:5173
 ```
 
 ---
@@ -151,9 +192,7 @@ Runs on:
 http://localhost:5173
 ```
 
----
-
-### Backend (Local Lambda Invocation)
+### Backend (local Lambda invoke)
 ```bash
 cd backend
 npm install
@@ -170,18 +209,6 @@ cd backend
 npx serverless deploy
 ```
 
-This deploys:
-- AWS Lambda function
-- API Gateway HTTP endpoint
-- CloudWatch logs
-
-Example endpoint:
-```
-POST https://xxxx.execute-api.us-east-1.amazonaws.com/leads
-```
-
----
-
 ### Frontend (Vercel)
 - Import GitHub repository
 - Set **Root Directory** to `frontend`
@@ -193,7 +220,7 @@ POST https://xxxx.execute-api.us-east-1.amazonaws.com/leads
   ```
   dist
   ```
-- Add environment variable:
+- Environment variable:
   ```
   VITE_API_URL=https://your-api-gateway-url
   ```
@@ -204,30 +231,20 @@ POST https://xxxx.execute-api.us-east-1.amazonaws.com/leads
 
 - Frontend never communicates directly with Odoo
 - All Odoo credentials live only in AWS Lambda
-- CORS is enforced at API Gateway level
-- No long-running servers
-- `.env` files are excluded from version control
+- CORS enforced at API Gateway
+- No long‑running servers
+- `.env` files excluded from version control
 
 ---
 
 ## 📦 Repository Status
 
-- Repository visibility: **Private / Client-owned**
+- Repository visibility: **Private / Client‑owned**
 - Infrastructure: **AWS account owned by client**
 - All credentials and sensitive data are excluded
 
 ---
 
-## 📌 Notes
-
-This architecture is designed to be:
-- Cost-efficient
-- Scalable
-- Easy to migrate between AWS accounts
-- Production-ready for B2B lead generation
-
----
-
 ## 📄 License
 
-This project is client-owned and not intended for redistribution.
+This project is client‑owned and not intended for redistribution.
